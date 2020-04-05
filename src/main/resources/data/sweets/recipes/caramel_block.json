@@ -1,0 +1,14 @@
+{
+  "type" : "minecraft:crafting_shaped",
+  "pattern" : [
+    "###",
+    "###",
+    "###"
+  ],
+  "key" : { "#" : { "item" : "sweets:caramel_ingot" } },
+  "result" :
+  {
+    "item" : "sweets:caramel_block",
+    "count" : 1
+  }
+}
