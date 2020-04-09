@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:smelting",
+  "ingredient": {
+    "item": "sweets:caramel_ore"
+  },
+  "result": "sweets:caramel_ingot",
+  "experience": 0.9,
+  "cookingtime": 80
+}

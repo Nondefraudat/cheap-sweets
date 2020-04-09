@@ -1,51 +1,75 @@
 package com.github.nondefraudat.mixin;
 
 import com.github.nondefraudat.CheapSweetsMain;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
+import com.github.nondefraudat.tools.CaramelAxe;
+import net.minecraft.advancement.criterion.Criterions;
+import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.enchantment.Enchantments;
+import net.minecraft.enchantment.UnbreakingEnchantment;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.TntEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.DefaultedList;
 import net.minecraft.world.World;
-import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import javax.security.auth.callback.Callback;
+import java.util.Random;
 
-@Mixin (LivingEntity.class)
-public abstract class LivingEntityMixin extends Entity
+@Mixin(LivingEntity.class)
+public class LivingEntityMixin
 {
-    @Shadow @Final private DefaultedList<ItemStack> equippedArmor;
-
-    public LivingEntityMixin(EntityType<?> type, World world) {
-        super(type, world);
-    }
-
-    @Inject (at = @At("HEAD"), method = "tick")
-    private void tick(CallbackInfo info)
+    @Inject(method = "eatFood", at = @At("HEAD"), cancellable = true)
+    protected void eatFoodPrev(World world, ItemStack stack, CallbackInfoReturnable info)
     {
-        if (isOnFire())
+        if (
+                stack.getItem().equals(CheapSweetsMain.CARAMEL_AXE) ||
+                stack.getItem().equals(CheapSweetsMain.CARAMEL_HOE) ||
+                stack.getItem().equals(CheapSweetsMain.CARAMEL_PICKAXE) ||
+                stack.getItem().equals(CheapSweetsMain.CARAMEL_SHOVEL) ||
+                stack.getItem().equals(CheapSweetsMain.CARAMEL_SWORD) ||
+                stack.getItem().equals(CheapSweetsMain.CARAMEL_HELMET) ||
+                stack.getItem().equals(CheapSweetsMain.CARAMEL_CHESTPLATE) ||
+                stack.getItem().equals(CheapSweetsMain.CARAMEL_LEGGINGS) ||
+                stack.getItem().equals(CheapSweetsMain.CARAMEL_BOOTS)
+        );
         {
-            ItemStack helmetStack = equippedArmor.get(3);
-            ItemStack chestplateStack = equippedArmor.get(2);
-            ItemStack legginsStack = equippedArmor.get(1);
-            ItemStack bootsStack = equippedArmor.get(0);
-
-            int explosionCount = 0;
-
-            if (helmetStack.getItem().equals(CheapSweetsMain.PAPER_HELMET))
+            stack.increment(1);
+        }
+    }
+    @Inject(method = "eatFood", at = @At("TAIL"), cancellable = true)
+    protected void eatFoodPost(World world, ItemStack stack, CallbackInfoReturnable info)
+    {
+        if (
+                stack.getItem().equals(CheapSweetsMain.CARAMEL_AXE) ||
+                stack.getItem().equals(CheapSweetsMain.CARAMEL_HOE) ||
+                stack.getItem().equals(CheapSweetsMain.CARAMEL_PICKAXE) ||
+                stack.getItem().equals(CheapSweetsMain.CARAMEL_SHOVEL) ||
+                stack.getItem().equals(CheapSweetsMain.CARAMEL_SWORD) ||
+                stack.getItem().equals(CheapSweetsMain.CARAMEL_HELMET) ||
+                stack.getItem().equals(CheapSweetsMain.CARAMEL_CHESTPLATE) ||
+                stack.getItem().equals(CheapSweetsMain.CARAMEL_LEGGINGS) ||
+                stack.getItem().equals(CheapSweetsMain.CARAMEL_BOOTS)
+        );
+        {
+            if (stack.getCount() > 1)
             {
-                TntEntity tntEntity = EntityType.TNT.create(world);
-                tntEntity.setFuse(0);
-                tntEntity.updatePosition(this.prevX, this.prevY, this.prevZ);
+                stack.decrement(1);
+            }
 
-                world.spawnEntity(tntEntity);
+            int maxDamage = stack.getMaxDamage();
+            int currentDamage = stack.getDamage();
+            int damageCounter = maxDamage / 10;
+            if (damageCounter + currentDamage > maxDamage)
+            {
+                stack.decrement(1);
+            }
+            else
+            {
+                stack.setDamage(damageCounter + currentDamage);
             }
         }
+
     }
 }

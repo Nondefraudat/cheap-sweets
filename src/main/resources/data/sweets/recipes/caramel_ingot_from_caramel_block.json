@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "group": "caramel_ingot",
+  "ingredients": [
+    {
+      "item": "sweet:caramel_block"
+    }
+  ],
+  "result": {
+    "item": "sweet:caramel_ingot",
+    "count": 9
+  }
+}

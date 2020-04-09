@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "sweets:caramel_ingot"
+    ]
+  },
+  "criteria": {
+    "has_caramel_ore": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "sweets:caramel_ore"
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "sweets:caramel_ingot"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_caramel_ore",
+      "has_the_recipe"
+    ]
+  ]
+}
