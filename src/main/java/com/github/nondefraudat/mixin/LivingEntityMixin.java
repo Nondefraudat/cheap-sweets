@@ -1,13 +1,8 @@
 package com.github.nondefraudat.mixin;
 
 import com.github.nondefraudat.CheapSweetsMain;
-import com.github.nondefraudat.tools.CaramelAxe;
-import net.minecraft.advancement.criterion.Criterions;
-import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.enchantment.Enchantments;
-import net.minecraft.enchantment.UnbreakingEnchantment;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
@@ -15,25 +10,33 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import java.util.Random;
-
 @Mixin(LivingEntity.class)
 public class LivingEntityMixin
 {
+    private static Item item;
+
+    private boolean isEatebalTool()
+    {
+        return  item.equals(CheapSweetsMain.CARAMEL_AXE) ||
+                item.equals(CheapSweetsMain.CARAMEL_HOE) ||
+                item.equals(CheapSweetsMain.CARAMEL_PICKAXE) ||
+                item.equals(CheapSweetsMain.CARAMEL_SHOVEL) ||
+                item.equals(CheapSweetsMain.CARAMEL_SWORD);
+    }
+
+    private boolean isEatebalArmor()
+    {
+        return  item.equals(CheapSweetsMain.CARAMEL_HELMET) ||
+                item.equals(CheapSweetsMain.CARAMEL_CHESTPLATE) ||
+                item.equals(CheapSweetsMain.CARAMEL_LEGGINGS) ||
+                item.equals(CheapSweetsMain.CARAMEL_BOOTS);
+    }
+
     @Inject(method = "eatFood", at = @At("HEAD"), cancellable = true)
     protected void eatFoodPrev(World world, ItemStack stack, CallbackInfoReturnable info)
     {
-        if (
-                stack.getItem().equals(CheapSweetsMain.CARAMEL_AXE) ||
-                stack.getItem().equals(CheapSweetsMain.CARAMEL_HOE) ||
-                stack.getItem().equals(CheapSweetsMain.CARAMEL_PICKAXE) ||
-                stack.getItem().equals(CheapSweetsMain.CARAMEL_SHOVEL) ||
-                stack.getItem().equals(CheapSweetsMain.CARAMEL_SWORD) ||
-                stack.getItem().equals(CheapSweetsMain.CARAMEL_HELMET) ||
-                stack.getItem().equals(CheapSweetsMain.CARAMEL_CHESTPLATE) ||
-                stack.getItem().equals(CheapSweetsMain.CARAMEL_LEGGINGS) ||
-                stack.getItem().equals(CheapSweetsMain.CARAMEL_BOOTS)
-        );
+        item = stack.getItem();
+        if ( isEatebalTool() || isEatebalArmor() )
         {
             stack.increment(1);
         }
@@ -41,17 +44,7 @@ public class LivingEntityMixin
     @Inject(method = "eatFood", at = @At("TAIL"), cancellable = true)
     protected void eatFoodPost(World world, ItemStack stack, CallbackInfoReturnable info)
     {
-        if (
-                stack.getItem().equals(CheapSweetsMain.CARAMEL_AXE) ||
-                stack.getItem().equals(CheapSweetsMain.CARAMEL_HOE) ||
-                stack.getItem().equals(CheapSweetsMain.CARAMEL_PICKAXE) ||
-                stack.getItem().equals(CheapSweetsMain.CARAMEL_SHOVEL) ||
-                stack.getItem().equals(CheapSweetsMain.CARAMEL_SWORD) ||
-                stack.getItem().equals(CheapSweetsMain.CARAMEL_HELMET) ||
-                stack.getItem().equals(CheapSweetsMain.CARAMEL_CHESTPLATE) ||
-                stack.getItem().equals(CheapSweetsMain.CARAMEL_LEGGINGS) ||
-                stack.getItem().equals(CheapSweetsMain.CARAMEL_BOOTS)
-        );
+        if ( isEatebalTool() || isEatebalArmor() )
         {
             if (stack.getCount() > 1)
             {
